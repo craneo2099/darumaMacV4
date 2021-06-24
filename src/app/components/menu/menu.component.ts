@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InicioLoginPage } from 'src/app/pages/inicio-login/inicio-login.page';
 import { Router, RouterEvent } from '@angular/router';
+import { DarumaService } from 'src/app/providers/daruma-service/daruma.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,7 +14,8 @@ export class MenuComponent implements OnInit {
     componente: any, icon: string}>;
   public selectedPath = '';
   
-  constructor(public router: Router   
+  constructor(public router: Router,
+              public ds: DarumaService
   ) { 
     
     this.rootPage = InicioLoginPage;
@@ -25,19 +27,7 @@ export class MenuComponent implements OnInit {
         {titulo: "Ajustes", color: "azul", componente: '/ajustes', icon: "settings"},
         {titulo: "Salir", color: "rosados", componente: '', icon: "log-out"}
     ]
-    
-    
-    
   }
-
-  goToPage(page){
-    // Nota: Quita token siempre al cargar inicioPage
-    this.selectedPath = '';
-}
-
-  // ionViewDidLeave(){
-  //   this.selectedPath = '';
-  // }
 
   ngOnInit() {
     this.router.events.subscribe((event : RouterEvent) => {
@@ -48,6 +38,15 @@ export class MenuComponent implements OnInit {
       // console.log("pathhhh", this.selectedPath);
       
     })
+  }
+
+  siSale(titulo) {
+    //Al salir borra Token
+    if (titulo == "Salir") {
+      this.ds.borraToken().then((token)=>{
+        console.log("tokenBorrado ");        
+      }).catch((e: any) => console.log('Error borraToken', e));      
+    }
   }
 
 }

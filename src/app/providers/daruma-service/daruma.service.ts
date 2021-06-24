@@ -59,6 +59,10 @@ export class DarumaService {
     return this.storage.get('newDAruma')
   }
 
+  borraToken(){
+    return this.storage.remove('tokenS')
+  }
+
   getDarumas(token){
     // console.log("tokInGetDar", token);
     const httpOptions = {

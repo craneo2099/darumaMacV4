@@ -63,24 +63,24 @@ export class CambioPassPage implements OnInit {
       // console.log("Completa todos los campos!!!");
       var texto = "Completa todos los campos!!!"
       await this.loader.dismiss();
-      this.doAlert("Error!", texto, "")
+      this.doAlert("¡Error!", texto, "")
     } else {
       if (this.cambioPassForm.get('passwordO').errors &&
       this.cambioPassForm.get('passwordO').dirty) {
         await this.loader.dismiss();
-        this.doAlert("Error!!!","Escribe el correo correctamente", "")
+        this.doAlert("¡¡¡Error!!!","Escribe el correo correctamente", "")
       }
       else if (this.cambioPassForm.get('matching_passwords').get('passwordN').hasError('minlength')) {
         await this.loader.dismiss();
-        this.doAlert("Error!!!", "Contrase\u00F1a: "+this.validation_messages.passwordN[1]["message"], "")
+        this.doAlert("¡¡¡Error!!!", "Contrase\u00F1a: ", this.validation_messages.passwordN[1]["message"])
       }
       else if (this.cambioPassForm.get('matching_passwords').get('passwordN').hasError('maxlength')) {
         await this.loader.dismiss();
-        this.doAlert("Error!!!", "Contrase\u00F1a: "+this.validation_messages.passwordN[2]["message"], "")
+        this.doAlert("¡¡¡Error!!!", "Contrase\u00F1a: ", this.validation_messages.passwordN[2]["message"])
       }
       else if (this.cambioPassForm.get('matching_passwords').hasError("areEqual")) {
         await this.loader.dismiss();
-        this.doAlert("Error!!!", "Contrase\u00F1a: "+this.validation_messages.matching_passwords[0]["message"], "")
+        this.doAlert("¡¡¡Error!!!", "Contrase\u00F1a: ", this.validation_messages.matching_passwords[0]["message"])
       }
       else {
         if (this.cambioPassForm.value.matching_passwords.passwordN == this.cambioPassForm.value.matching_passwords.passwordNC) {
@@ -100,14 +100,16 @@ export class CambioPassPage implements OnInit {
               let sub = "¡Contrase\u00F1a actualizada!"
               let mes = "Inicia sesi\u00F3n nuevamente"
               await this.loader.dismiss();
-              this.doAlertConfirm("Exito!",sub, mes)
+              this.doAlertConfirm("¡Éxito!",sub, mes)
             } else {
               // console.log("pass Incorrecto", res);
               await this.loader.dismiss();
-              this.doAlert("Error!!!", "Contrase\u00F1a incorrecta","")
+              this.doAlert("¡¡¡Error!!!", "Contrase\u00F1a incorrecta","")
             }
-          }, error => {
+          }, async error => {
             console.error("Error actualizarPass", error);
+            await this.loader.dismiss();
+            this.doAlert("¡¡¡Error!!!", "Lo sentimos...","Intenta de nuevo mas tarde")
           })
         }
       }
@@ -159,8 +161,10 @@ export class CambioPassPage implements OnInit {
         {
         text: 'Ok',
         handler: () => {
-          // this.navCtrl.setRoot(InicioLoginPage)
-          this.router.navigate(['inicio-login']);
+          this.ds.borraToken().then((token)=>{
+            console.log("tokenBorrado ");
+            this.router.navigate(['inicio-login']);        
+          }).catch((e: any) => console.log('Error borraToken', e)); 
         }
       }]
     });

@@ -1,7 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { InicioLoginPage } from '../inicio-login/inicio-login.page';
 import { DarumaService } from 'src/app/providers/daruma-service/daruma.service';
 import { Router } from '@angular/router';
 
@@ -44,22 +43,22 @@ export class RecuperarPage implements OnInit {
     if (this.recuperarForm.get('correo').hasError('required') ||
       this.recuperarForm.get('captcha').hasError('required')) {
       await this.loader.dismiss();
-      this.doAlert("Error!!!","Campo requerido")
+      this.doAlert("¡¡¡Error!!!","Campo requerido", null)
     } else {
       if (this.recuperarForm.get('correo').errors &&
         this.recuperarForm.get('correo').dirty &&
         this.recuperarForm.get('correo').hasError('pattern')) {
          console.log("No entra");
          await this.loader.dismiss();
-         this.doAlert("Error!!!","Escribe el correo correctamente")
+         this.doAlert("¡¡¡Error!!!","Escribe el correo correctamente", null)
       }
       else if (this.recuperarForm.get('captcha').hasError('minlength')){
         await this.loader.dismiss();
-        this.doAlert("Error!!!", "Captcha: "+this.validation_messages.captcha[1]["message"])
+        this.doAlert("¡¡¡Error!!!", "Captcha: "+this.validation_messages.captcha[1]["message"], null)
       }
       else if (this.recuperarForm.get('captcha').hasError('maxlength')){
         await this.loader.dismiss();
-        this.doAlert("Error!!!", "Captcha: "+this.validation_messages.captcha[2]["message"])
+        this.doAlert("¡¡¡Error!!!", "Captcha: "+this.validation_messages.captcha[2]["message"], null)
       }
       else {
         console.log("Entroooo");
@@ -72,11 +71,18 @@ export class RecuperarPage implements OnInit {
         .subscribe(async res2 =>{
           console.log("res2", res2);
           await this.loader.dismiss();
-          this.doAlertConfirm("Info","Se ha enviado el correo, Sigue los pasos para reestablecer tu contraseña")
+          if ( res2["result"] == "NO_HUMANO" && res2["response"] == false){
+            await this.loader.dismiss();
+            this.doAlert("¡Alerta!","Verifica el texto","Que sea el mismo de la imagen")
+            console.log("Error Captcha");
+          }
+          else{
+            this.doAlertConfirm("Info","¡Se ha enviado el correo!", "Sigue los pasos para reestablecer tu contraseña")
+          }
         }, async error => {
           console.log("error al registrar", error);
           await this.loader.dismiss();
-          this.doAlert("Error!!!","Captcha incorrecto")
+          this.doAlert("¡¡¡Error!!!","Captcha incorrecto", null)
         })
       }
     }
@@ -100,10 +106,11 @@ export class RecuperarPage implements OnInit {
     ]
   };
 
-  async doAlert(titulo, texto) {
+  async doAlert(titulo, subtitulo, texto) {
     let alert = await this.alertCtrl.create({
       header: titulo,
-      subHeader: texto,
+      subHeader: subtitulo,
+      message: texto,
       backdropDismiss: false,
       buttons: ['Ok']
     });
@@ -111,10 +118,11 @@ export class RecuperarPage implements OnInit {
     await alert.present();
   }
 
-  async doAlertConfirm(titulo, texto) {
+  async doAlertConfirm(titulo, subtitulo, texto) {
     let alert = await this.alertCtrl.create({
       header: titulo,
-      subHeader: texto,
+      subHeader: subtitulo,
+      message: texto,
       backdropDismiss: false,
       buttons: [
         {

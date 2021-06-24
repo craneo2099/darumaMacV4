@@ -47,13 +47,10 @@ export class InicioLoginPage implements OnInit {
           // Validators.minLength(4)
         ])]
       })
-      this.storage.remove('tokenS')
+      //this.storage.remove('tokenS')
       this.menuCtrl.enable(false)
-
+      this.verificaToken();
       // console.log("Antes", this.isKeyboardHide);
-      
-
-
      }
 
   ngOnInit() {
@@ -149,6 +146,19 @@ export class InicioLoginPage implements OnInit {
     // this.navCtrl.push(RecuperarPage);
     this.router.navigate(['recuperar'])
     
+  }
+
+  verificaToken() {
+    //verificar si hay un token para inicio de sesión
+    this.ds.getToken().then(async (token)=>{
+      this.loader = await this.loadingCtrl.create();
+      if (token == null) {
+        console.log("No Token");
+      } else {
+        //console.log("tokenIni: ", token);
+        this.router.navigate(['darumas-gral']);
+      }
+    }).catch((e: any) => console.log('Error getToken', e));
   }
 
   async ionViewDidLeave(){
