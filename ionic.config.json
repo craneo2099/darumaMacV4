@@ -1,0 +1,8 @@
+{
+  "name": "darumaMacV4",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}
