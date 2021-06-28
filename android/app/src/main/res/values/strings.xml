@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">darumaMacV4</string>
+    <string name="title_activity_main">darumaMacV4</string>
+    <string name="package_name">com.devstarnovatech.darumakoinobor</string>
+    <string name="custom_url_scheme">com.devstarnovatech.darumakoinobor</string>
+</resources>
