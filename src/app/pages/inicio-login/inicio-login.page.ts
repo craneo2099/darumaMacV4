@@ -49,7 +49,7 @@ export class InicioLoginPage implements OnInit {
       })
       //this.storage.remove('tokenS')
       this.menuCtrl.enable(false)
-      this.verificaToken();
+      //this.verificaToken();
       // console.log("Antes", this.isKeyboardHide);
      }
 
@@ -59,9 +59,9 @@ export class InicioLoginPage implements OnInit {
 
   async logForm(){
     
-    this.loader = await this.loadingCtrl.create();
+    
     if (this.loginForm.get('email').hasError('required') || this.loginForm.get('password').hasError('required')) {
-      console.log("campo nulo");
+      // console.log("campo nulo");
       let error="Error!"
       let texto="Escribe tu Usuario (e-mail) y/o Password";
       this.doAlert(error, texto);
@@ -75,7 +75,7 @@ export class InicioLoginPage implements OnInit {
       } else {
         this.loader.present();
         let z = this.datePipe.transform(new Date(), 'Z')
-        console.log("zeeetaa", z);
+        // console.log("zeeetaa", z);
 
         let sha256 = CryptoJS.SHA256(this.loginForm.value.password)
         // comentario
@@ -89,7 +89,7 @@ export class InicioLoginPage implements OnInit {
         }
         this.ds.doLogin(this.datosLogin)
         .subscribe(data => {
-          console.log("data InLog.ts",data);
+          // console.log("data InLog.ts",data);
           if (data["response"]==false) {
             console.log("datos Incorrectos");
             let error="Error!!!";
@@ -165,8 +165,8 @@ export class InicioLoginPage implements OnInit {
     await this.loader.dismiss();
    }
 
-  ionViewWillEnter() {
-
+  async ionViewWillEnter() {
+    this.loader = await this.loadingCtrl.create();
     window.addEventListener('keyboardWillHide', () => {
       this.ngZone.run(() => {
         this.isKeyboardHide = true;
@@ -180,5 +180,12 @@ export class InicioLoginPage implements OnInit {
       });
       // console.log('keyboard will show with height', this.isKeyboardHide);
     });
+    // deshabilita menu
+    this.menuCtrl.isEnabled().then(res =>{
+      // console.log("deshabilita menu");  
+      if (res == true) {
+          this.menuCtrl.enable(false);
+      }
+    }).catch((e: any) => console.log('Error menuCtrlIniLog', e));
   }
 }

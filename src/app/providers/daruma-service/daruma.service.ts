@@ -25,6 +25,7 @@ export class DarumaService {
     this.darumaUrl = "https://koinobori-artesanias.com/darumas/public/";
     //Proxy pruebas
     //this.darumaUrl = "/darumaUrl/";
+    // this.darumaUrl = "https://koinobori-artesanias.com/koin/darumas/public/";
     }
 
   doLogin(loginData){

@@ -78,6 +78,7 @@ export class AjustesPage implements OnInit {
             }, error => {
               console.log("Error eliminarCuenta", error);
             })
+            //Borra Token y redirige a inicio
             this.ds.borraToken().then((token)=>{
               console.log("tokenBorrado ");
               this.router.navigate(['inicio-login']);        
